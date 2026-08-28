@@ -1,4 +1,5 @@
 fastapi
 uvicorn
-pydantic
 pyjwt
+pydantic
+email-validator
