@@ -3,317 +3,530 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SEE4USD | Premium High-CPM Micro-Task Platform</title>
+  <title>SEE4USD | Premium High-CPM Micro-Task & Ad Network</title>
   <style>
     :root {
-      --bg-color: #0f172a;
-      --card-bg: rgba(30, 41, 59, 0.7);
-      --accent-color: #10b981;
-      --accent-hover: #059669;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border-color: rgba(255, 255, 255, 0.1);
-      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --bg: #070913;
+      --card-bg: rgba(21, 28, 44, 0.75);
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.3);
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 14px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* Navigation Header */
+    /* Glass Navigation */
     header {
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .brand { display: flex; align-items: center; gap: 10px; }
-    .brand h1 { font-size: 1.5rem; color: var(--accent-color); font-weight: 800; }
-    .badge-tier1 {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #fff;
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: bold;
-    }
-
-    .user-info { display: flex; align-items: center; gap: 20px; }
-    .balance-box {
-      background: var(--card-bg);
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-      font-weight: bold;
-    }
-    .balance-box span { color: var(--accent-color); }
-
-    select {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+    .brand { font-size: 1.6rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; cursor: pointer; }
+    .nav-links { display: flex; gap: 0.8rem; align-items: center; }
+    .nav-btn { background: none; border: none; color: var(--muted); font-weight: 600; padding: 8px 14px; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+    .nav-btn:hover, .nav-btn.active { color: var(--text); background: var(--border); }
 
     /* Layout */
-    container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; width: 100%; flex: 1; }
-    
-    .section-title { margin-bottom: 1rem; font-size: 1.25rem; border-left: 4px solid var(--accent-color); padding-left: 10px; }
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; width: 100%; flex: 1; }
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
 
-    /* Ad Grid */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1.5rem;
+    /* Landing Page Styling */
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem 4rem 1rem;
+      background: radial-gradient(circle at top, rgba(16, 185, 129, 0.12) 0%, transparent 60%);
+      border-radius: var(--radius);
       margin-bottom: 3rem;
     }
+    .hero h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.2; }
+    .hero h1 span { color: var(--accent); }
+    .hero p { font-size: 1.1rem; color: var(--muted); max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.6; }
+    
+    .cta-group { display: flex; gap: 1rem; justify-content: center; }
+    .btn-hero { padding: 14px 28px; font-weight: 800; border-radius: 10px; border: none; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+    .btn-primary { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn-secondary { background: var(--border); color: var(--text); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: var(--glass-shadow);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s ease;
+    /* Features / How It Works */
+    .section-header { text-align: center; margin-bottom: 2.5rem; }
+    .section-header h2 { font-size: 2rem; margin-bottom: 0.5rem; }
+    .section-header p { color: var(--muted); }
+
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+    .info-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative;
     }
-    .card:hover { transform: translateY(-4px); }
-
-    .card-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
-    .card-title { font-weight: 600; }
-    .payout-tag { color: var(--accent-color); font-weight: 800; font-size: 1.1rem; }
-
-    .card-body { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-
-    .btn {
-      background: var(--accent-color);
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-      transition: background 0.2s;
+    .step-number {
+      display: inline-block; width: 36px; height: 36px; background: var(--accent-glow); color: var(--accent);
+      border-radius: 50%; text-align: center; line-height: 36px; font-weight: 900; margin-bottom: 1rem;
     }
-    .btn:hover { background: var(--accent-hover); }
+    .info-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .info-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
 
-    /* Modal Overlay */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(5px);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
+    .tier-box {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(21, 28, 44, 0.8));
+      border: 1px solid var(--accent); border-radius: var(--radius); padding: 2rem; text-align: center; margin-bottom: 4rem;
     }
 
-    .modal-content {
-      background: #1e293b;
-      padding: 2rem;
-      border-radius: 12px;
-      text-align: center;
-      max-width: 400px;
-      width: 90%;
-      border: 1px solid var(--border-color);
-    }
-const API_BASE = "https://see4usd-backend.onrender.com/api/v1";
-    .timer-display { font-size: 3rem; color: var(--accent-color); font-weight: bold; margin: 1rem 0; }
-    .warning-text { font-size: 0.8rem; color: #ef4444; margin-top: 8px; }
+    /* Wallet & Dashboard Cards */
+    .wallet-banner { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+    .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .stat-label { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+    .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--accent); margin-top: 5px; }
 
-    /* Footer */
-    footer {
-      background: rgba(15, 23, 42, 0.9);
-      border-top: 1px solid var(--border-color);
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-muted);
+    /* Forms */
+    .auth-card, .form-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 2.5rem; max-width: 450px; margin: 2rem auto; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
     }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+    .form-control {
+      width: 100%; padding: 12px 16px; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
+      border-radius: 8px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.2s;
+    }
+    .form-control:focus { border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+    .btn-action {
+      width: 100%; padding: 12px; background: var(--accent); color: #000; font-weight: 800; border: none;
+      border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 1rem;
+    }
+    .btn-action:hover { filter: brightness(1.1); }
 
-    footer a { color: var(--accent-color); text-decoration: none; }
+    /* Tables & Badges */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+    .task-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .table-responsive { width: 100%; overflow-x: auto; margin-top: 1rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+    th, td { padding: 14px 18px; border-bottom: 1px solid var(--border); }
+    th { background: rgba(0,0,0,0.4); color: var(--muted); }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .badge-completed { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge-rejected { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand">
-      <h1>SEE4USD</h1>
-      <span class="badge-tier1">Tier-1 Region</span>
-    </div>
-    <div class="user-info">
-      <select id="countrySelect" onchange="fetchData()">
-        <option value="US">🇺🇸 United States</option>
-        <option value="CH">🇨🇭 Switzerland</option>
-        <option value="GB">🇬🇧 United Kingdom</option>
-        <option value="CA">🇨🇦 Canada</option>
-        <option value="AU">🇦🇺 Australia</option>
-        <option value="DE">🇩🇪 Germany</option>
-        <option value="FR">🇫🇷 France</option>
-      </select>
-      <div class="balance-box">Balance: <span id="userBalance">$0.00</span> USD</div>
+    <div class="brand" onclick="switchView('homeView')">SEE4USD</div>
+    <div class="nav-links">
+      <button class="nav-btn active" id="homeTabBtn" onclick="switchView('homeView')">Home</button>
+      
+      <!-- Protected Links (Hidden by default until logged in) -->
+      <button class="nav-btn protected-link" style="display:none;" onclick="switchView('dashboardView')">Dashboard</button>
+      <button class="nav-btn protected-link" style="display:none;" onclick="switchView('tasksView')">Micro-Tasks</button>
+      <button class="nav-btn protected-link" style="display:none;" onclick="switchView('walletView')">Deposit / Withdraw</button>
+      <button class="nav-btn protected-link" id="adminTabBtn" style="display:none; color:var(--warning);" onclick="switchView('adminView')">Admin Panel</button>
+      
+      <button class="nav-btn" id="authNavBtn" onclick="openAuth('login')">Login / Register</button>
     </div>
   </header>
 
-  <container>
-    <h2 class="section-title">Available High-CPM Advertisements</h2>
-    <div class="grid-container" id="adGrid">
+  <div class="container">
+
+    <!-- HOME PAGE (Company Introduction & How To Earn) -->
+    <div id="homeView" class="view-panel active">
+      <div class="hero">
+        <h1>Turn Your Spare Time Into Real <span>USD Earnings</span></h1>
+        <p>SEE4USD is a premier international advertising and micro-task platform connecting global advertisers with verified users. Earn daily rewards by completing high-yield micro-tasks, watching premium ads, and testing digital apps.</p>
+        <div class="cta-group">
+          <button class="btn-hero btn-primary" onclick="openAuth('register')">Get Started Free</button>
+          <button class="btn-hero btn-secondary" onclick="openAuth('login')">Member Login</button>
+        </div>
       </div>
 
-    <h2 class="section-title">Daily Micro-Tasks</h2>
-    <div class="grid-container" id="taskGrid">
+      <div class="tier-box">
+        <h3>🌍 Targeted Tier-1 High-CPM Rates</h3>
+        <p style="color:var(--muted); margin-top: 8px;">We specialize in top advertising regions: <strong>United States, Switzerland, United Kingdom, Canada, Australia, Germany, and France</strong>. Users in these regions receive up to 5x premium reward rates!</p>
       </div>
-  </container>
 
-  <div class="modal" id="adModal">
-    <div class="modal-content">
-      <h3 id="modalAdTitle">Viewing Advertisement</h3>
-      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Do not switch tabs or leave this window.</p>
-      <div class="timer-display" id="timerDisplay">0s</div>
-      <p class="warning-text" id="tabWarning" style="display: none;">⚠️ Paused! Active tab focus required.</p>
-      <button class="btn" id="claimBtn" style="display: none;" onclick="claimReward()">Claim Reward</button>
+      <div class="section-header">
+        <h2>How Members Earn Money On SEE4USD</h2>
+        <p>Simple, transparent 4-step earning workflow</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="step-number">1</div>
+          <h3>Create Free Account</h3>
+          <p>Sign up using your email and choose your target country tier. Registration takes less than 30 seconds with instant activation.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="step-number">2</div>
+          <h3>Choose Daily Tasks</h3>
+          <p>Browse our list of daily micro-tasks, sponsored video ads, product surveys, and mobile app testing offers.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="step-number">3</div>
+          <h3>Submit for Verification</h3>
+          <p>Complete tasks and submit your progress. Our admin team reviews tasks quickly to ensure genuine participation and quality control.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="step-number">4</div>
+          <h3>Withdraw Your Earnings</h3>
+          <p>Once approved, your balance is credited in USD. Request payouts directly to your Crypto Wallet (USDT) or preferred payment gateway.</p>
+        </div>
+      </div>
     </div>
+
+    <!-- AUTH VIEW (Login / Register) -->
+    <div id="authView" class="view-panel">
+      <div class="auth-card">
+        <h2 style="margin-bottom: 1.5rem; text-align:center;" id="authTitle">Sign In to SEE4USD</h2>
+        <form id="authForm" onsubmit="handleAuth(event)">
+          <div class="form-group" id="emailGroup" style="display:none;">
+            <label>Email Address</label>
+            <input type="email" id="authEmail" class="form-control" placeholder="user@domain.com">
+          </div>
+          <div class="form-group">
+            <label>Username or Email</label>
+            <input type="text" id="authIdentifier" class="form-control" required placeholder="Enter username or email">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="authPassword" class="form-control" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-action" id="authSubmitBtn">Login</button>
+        </form>
+        <p style="margin-top: 1rem; font-size: 0.85rem; text-align: center; color: var(--muted);">
+          <span id="authToggleText">Need an account?</span> 
+          <a href="#" style="color:var(--accent);" onclick="toggleAuthMode()">Switch Here</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- DASHBOARD VIEW (Logged-In Users Only) -->
+    <div id="dashboardView" class="view-panel">
+      <div class="wallet-banner">
+        <div class="stat-card">
+          <div class="stat-label">Available Balance</div>
+          <div class="stat-val" id="userBalance">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Admin Approval</div>
+          <div class="stat-val" style="color:var(--warning);" id="userPending">$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Account Tier</div>
+          <div class="stat-val" style="font-size:1.4rem;" id="userCountry">Tier-1 (USA)</div>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom: 1rem;">Transaction & Activity History</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Description</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TASKS VIEW -->
+    <div id="tasksView" class="view-panel">
+      <h2 style="margin-bottom: 1.5rem;">Daily Sponsored Micro-Tasks</h2>
+      <div class="grid">
+        <div class="task-card">
+          <div>
+            <h3>Swiss FinTech App Review</h3>
+            <p style="color:var(--muted); font-size:0.85rem; margin:10px 0;">Download and test the sandbox banking workflow.</p>
+          </div>
+          <div>
+            <div style="font-size:1.2rem; font-weight:bold; color:var(--accent); margin-bottom:10px;">+$1.50 USD</div>
+            <button class="btn-action" onclick="submitTask('task_01', 'Swiss FinTech Review', 1.50)">Complete & Submit</button>
+          </div>
+        </div>
+        <div class="task-card">
+          <div>
+            <h3>UK E-Commerce Consumer Survey</h3>
+            <p style="color:var(--muted); font-size:0.85rem; margin:10px 0;">Answer 5 questions regarding modern shopping trends.</p>
+          </div>
+          <div>
+            <div style="font-size:1.2rem; font-weight:bold; color:var(--accent); margin-bottom:10px;">+$0.80 USD</div>
+            <button class="btn-action" onclick="submitTask('task_02', 'UK E-Commerce Survey', 0.80)">Complete & Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WALLET VIEW -->
+    <div id="walletView" class="view-panel">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+        <div class="form-card" style="margin:0; max-width:100%;">
+          <h3>Submit Deposit</h3>
+          <p style="color:var(--muted); font-size:0.85rem; margin-bottom: 1rem;">Admin manually approves all incoming credits.</p>
+          <form onsubmit="handleFinance(event, 'deposit')">
+            <div class="form-group"><label>Amount ($USD)</label><input type="number" step="0.01" id="depAmount" class="form-control" required></div>
+            <div class="form-group"><label>Payment Gateway</label><input type="text" id="depMethod" class="form-control" placeholder="USDT TRC20 / Bank" required></div>
+            <div class="form-group"><label>Transaction Hash / ID</label><input type="text" id="depWallet" class="form-control" required></div>
+            <button type="submit" class="btn-action">Submit Deposit Request</button>
+          </form>
+        </div>
+
+        <div class="form-card" style="margin:0; max-width:100%;">
+          <h3>Request Withdrawal</h3>
+          <p style="color:var(--muted); font-size:0.85rem; margin-bottom: 1rem;">Funds are moved to pending until Admin processes payouts.</p>
+          <form onsubmit="handleFinance(event, 'withdrawal')">
+            <div class="form-group"><label>Amount ($USD)</label><input type="number" step="0.01" id="wdAmount" class="form-control" required></div>
+            <div class="form-group"><label>Payout Method</label><input type="text" id="wdMethod" class="form-control" placeholder="Crypto Wallet / PayPal" required></div>
+            <div class="form-group"><label>Your Wallet / Destination Address</label><input type="text" id="wdWallet" class="form-control" required></div>
+            <button type="submit" class="btn-action" style="background:var(--warning);">Request Payout</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN PANEL VIEW -->
+    <div id="adminView" class="view-panel">
+      <h2 style="color:var(--warning); margin-bottom: 1.5rem;">Admin Control Center</h2>
+      <div class="form-card" style="margin:0 0 2rem 0; max-width:100%;">
+        <h3>Manual User Balance Control</h3>
+        <p style="color:var(--muted); font-size:0.85rem; margin-bottom: 1rem;">Directly add or subtract funds from any user account balance.</p>
+        <form onsubmit="handleAdminBalance(event)">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;">
+            <div class="form-group"><label>Target Username</label><input type="text" id="admUser" class="form-control" required></div>
+            <div class="form-group"><label>Amount ($USD)</label><input type="number" step="0.01" id="admAmount" class="form-control" required></div>
+            <div class="form-group">
+              <label>Action</label>
+              <select id="admAction" class="form-control">
+                <option value="add">Add Funds (+)</option>
+                <option value="subtract">Deduct Funds (-)</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-action">Execute Balance Adjustment</button>
+        </form>
+      </div>
+
+      <h3>Pending Approval Queue</h3>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr><th>User</th><th>Type</th><th>Amount</th><th>Details</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="adminPendingTable">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
-  <footer>
-    <p>&copy; 2026 SEE4USD Technologies Inc. All rights reserved.</p>
-    <p style="margin-top: 5px;">GDPR & CCPA Compliant. Users from US, CH, UK, CA, AU, DE, FR receive Tier-1 payouts. <a href="#">Privacy Policy</a></p>
-  </footer>
-
   <script>
-    const API_BASE = "http://localhost:8000/api/v1";
-    let activeAd = null;
-    let timerVal = 0;
-    let timerInterval = null;
-    let activeToken = "";
+    // Update API URL with your Render backend link once live
+    const API = "http://localhost:8000/api/v1"; 
+    let token = localStorage.getItem("see4usd_jwt") || null;
+    let isRegisterMode = false;
 
-    // Rates conversion context for local display calculation
-    const FX_RATES = { US: 1.0, CH: 0.88, GB: 0.79, CA: 1.35, AU: 1.52, DE: 0.92, FR: 0.92 };
-    const CURRENCY_SYMBOLS = { US: "$", CH: "CHF ", GB: "£", CA: "CA$", AU: "A$", DE: "€", FR: "€" };
-
-    async function fetchData() {
-      const country = document.getElementById("countrySelect").value;
+    function switchView(viewId) {
+      document.querySelectorAll(".view-panel").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
       
-      // Fetch Dashboard stats
+      const targetView = document.getElementById(viewId);
+      if (targetView) targetView.classList.add("active");
+
+      if (token && viewId === "dashboardView") loadProfile();
+      if (token && viewId === "adminView") loadAdminData();
+    }
+
+    function openAuth(mode) {
+      isRegisterMode = (mode === 'register');
+      updateAuthUI();
+      switchView('authView');
+    }
+
+    function toggleAuthMode() {
+      isRegisterMode = !isRegisterMode;
+      updateAuthUI();
+    }
+
+    function updateAuthUI() {
+      document.getElementById("emailGroup").style.display = isRegisterMode ? "block" : "none";
+      document.getElementById("authTitle").innerText = isRegisterMode ? "Create New Account" : "Sign In to SEE4USD";
+      document.getElementById("authSubmitBtn").innerText = isRegisterMode ? "Register Account" : "Login";
+    }
+
+    async function handleAuth(e) {
+      e.preventDefault();
+      const endpoint = isRegisterMode ? "/auth/register" : "/auth/login";
+      const payload = isRegisterMode ? {
+        username: document.getElementById("authIdentifier").value,
+        email: document.getElementById("authEmail").value,
+        password: document.getElementById("authPassword").value
+      } : {
+        identifier: document.getElementById("authIdentifier").value,
+        password: document.getElementById("authPassword").value
+      };
+
       try {
-        const dashRes = await fetch(`${API_BASE}/user/dashboard?user_id=usr_9982&country=${country}`);
-        const dashData = await dashRes.json();
-        
-        // Update user balance with local currency context calculation
-        const localRate = FX_RATES[country] || 1.0;
-        const symbol = CURRENCY_SYMBOLS[country] || "$";
-        const localEquiv = (dashData.balance_usd * localRate).toFixed(2);
-        
-        document.getElementById("userBalance").innerText = `$${dashData.balance_usd.toFixed(2)} USD (~${symbol}${localEquiv})`;
+        const res = await fetch(API + endpoint, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
 
-        // Fetch Ads
-        const adsRes = await fetch(`${API_BASE}/ads?country=${country}`);
-        const ads = await adsRes.json();
-        renderAds(ads);
-      } catch (err) {
-        console.error("API Error: Backend offline or unreachable", err);
-      }
-    }
-
-    function renderAds(ads) {
-      const grid = document.getElementById("adGrid");
-      grid.innerHTML = "";
-      ads.forEach(ad => {
-        grid.innerHTML += `
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">${ad.title}</span>
-              <span class="payout-tag">+$${ad.payout.toFixed(2)}</span>
-            </div>
-            <div class="card-body">
-              Target Region: ${ad.allowed_country}<br>
-              Duration: ${ad.duration} Seconds
-            </div>
-            <button class="btn" onclick="startAd('${ad.id}', '${ad.title}', ${ad.duration})">Watch Ad</button>
-          </div>
-        `;
-      });
-    }
-
-    function startAd(id, title, duration) {
-      activeAd = { id, duration };
-      timerVal = duration;
-      document.getElementById("modalAdTitle").innerText = title;
-      document.getElementById("timerDisplay").innerText = `${timerVal}s`;
-      document.getElementById("claimBtn").style.display = "none";
-      document.getElementById("adModal").style.display = "flex";
-
-      // Mock Token generation for verification handshake
-      activeToken = `tok_${Math.random().toString(36).substring(2, 9)}`;
-
-      startTimer();
-    }
-
-    function startTimer() {
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        if (!document.hidden) {
-          timerVal--;
-          document.getElementById("timerDisplay").innerText = `${timerVal}s`;
-          document.getElementById("tabWarning").style.display = "none";
-
-          if (timerVal <= 0) {
-            clearInterval(timerInterval);
-            document.getElementById("timerDisplay").innerText = "Done!";
-            document.getElementById("claimBtn").style.display = "block";
+        if (res.ok) {
+          if (!isRegisterMode) {
+            token = data.token;
+            localStorage.setItem("see4usd_jwt", token);
+            updateNavState(data.user);
+            switchView("dashboardView");
+          } else {
+            alert("Registration successful! Please login.");
+            openAuth('login');
           }
         } else {
-          document.getElementById("tabWarning").style.display = "block";
+          alert(data.detail || "Authentication error");
         }
-      }, 1000);
+      } catch (err) {
+        alert("Server connection failed. Make sure your Python backend is running.");
+      }
     }
 
-    // Anti-Cheat: Active Window Enforcement
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && timerVal > 0 && activeAd) {
-        document.getElementById("tabWarning").style.display = "block";
-      }
-    });
-
-    async function claimReward() {
-      const country = document.getElementById("countrySelect").value;
-      const res = await fetch(`${API_BASE}/ads/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_id: "usr_9982",
-          ad_id: activeAd.id,
-          watch_duration: activeAd.duration,
-          token: activeToken,
-          country: country
-        })
-      });
-
-      const data = await res.json();
-      if (data.status === "success") {
-        document.getElementById("adModal").style.display = "none";
-        activeAd = null;
-        fetchData(); // Refresh UI Balance
+    function updateNavState(user) {
+      const protectedLinks = document.querySelectorAll(".protected-link");
+      if (user && token) {
+        // Show protected links when logged in
+        protectedLinks.forEach(el => el.style.display = "inline-block");
+        document.getElementById("homeTabBtn").style.display = "none";
+        document.getElementById("authNavBtn").innerText = `Logout (${user.username})`;
+        document.getElementById("authNavBtn").onclick = logout;
+        if (user.role === "admin") document.getElementById("adminTabBtn").style.display = "inline-block";
       } else {
-        alert("Verification failed: " + data.reason);
+        // Hide protected links when logged out
+        protectedLinks.forEach(el => el.style.display = "none");
+        document.getElementById("homeTabBtn").style.display = "inline-block";
+        document.getElementById("authNavBtn").innerText = "Login / Register";
+        document.getElementById("authNavBtn").onclick = () => openAuth('login');
       }
     }
 
-    // Initialize on page load
-    window.onload = fetchData;
+    function logout() {
+      localStorage.removeItem("see4usd_jwt");
+      token = null;
+      updateNavState(null);
+      switchView("homeView");
+    }
+
+    async function loadProfile() {
+      const res = await fetch(API + "/user/profile", { headers: { "Authorization": `Bearer ${token}` } });
+      if (!res.ok) return logout();
+      const data = await res.json();
+
+      document.getElementById("userBalance").innerText = `$${data.balance_usd.toFixed(2)}`;
+      document.getElementById("userPending").innerText = `$${data.pending_usd.toFixed(2)}`;
+      document.getElementById("userCountry").innerText = `${data.country} (${data.role.toUpperCase()})`;
+      updateNavState({ username: data.username, role: data.role });
+
+      const tbody = document.getElementById("historyTableBody");
+      tbody.innerHTML = data.history.map(h => `
+        <tr>
+          <td><strong style="text-transform:uppercase;">${h.type}</strong></td>
+          <td>${h.desc}</td>
+          <td style="color:${h.amount >= 0 ? 'var(--accent)' : 'var(--danger)'}">$${Math.abs(h.amount).toFixed(2)}</td>
+          <td><span class="badge badge-${h.status}">${h.status}</span></td>
+          <td style="color:var(--muted);">${new Date(h.date).toLocaleDateString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function submitTask(id, title, reward) {
+      if (!token) return alert("Please login first!");
+      const res = await fetch(API + "/tasks/submit", {
+        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ task_id: id, task_title: title, reward: reward })
+      });
+      const data = await res.json();
+      alert(data.message);
+      switchView("dashboardView");
+    }
+
+    async function handleFinance(e, type) {
+      e.preventDefault();
+      if (!token) return alert("Please login first!");
+      const amount = parseFloat(document.getElementById(type === 'deposit' ? 'depAmount' : 'wdAmount').value);
+      const method = document.getElementById(type === 'deposit' ? 'depMethod' : 'wdMethod').value;
+      const wallet = document.getElementById(type === 'deposit' ? 'depWallet' : 'wdWallet').value;
+
+      const res = await fetch(`${API}/finance/request?type=${type}`, {
+        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({ amount, method, wallet_address: wallet })
+      });
+      const data = await res.json();
+      if (res.ok) { alert(data.message); switchView("dashboardView"); } else { alert(data.detail); }
+    }
+
+    async function handleAdminBalance(e) {
+      e.preventDefault();
+      const payload = {
+        target_username: document.getElementById("admUser").value,
+        amount: parseFloat(document.getElementById("admAmount").value),
+        type: document.getElementById("admAction").value
+      };
+      const res = await fetch(API + "/admin/modify-balance", {
+        method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (res.ok) { alert(data.message); loadAdminData(); } else { alert(data.detail); }
+    }
+
+    async function loadAdminData() {
+      const res = await fetch(API + "/admin/pending-requests", { headers: { "Authorization": `Bearer ${token}` } });
+      if (!res.ok) return;
+      const data = await res.json();
+
+      document.getElementById("adminPendingTable").innerHTML = data.map(r => `
+        <tr>
+          <td>@${r.username}</td>
+          <td><strong style="text-transform:uppercase;">${r.type}</strong></td>
+          <td>$${r.amount.toFixed(2)}</td>
+          <td>${r.desc}</td>
+          <td>
+            <button class="nav-btn" style="color:var(--accent);" onclick="approveTx(${r.tx_id}, true)">Approve</button>
+            <button class="nav-btn" style="color:var(--danger);" onclick="approveTx(${r.tx_id}, false)">Reject</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function approveTx(txId, approve) {
+      const res = await fetch(`${API}/admin/approve-request?tx_id=${txId}&approve=${approve}`, {
+        method: "POST", headers: { "Authorization": `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (res.ok) { loadAdminData(); } else { alert(data.detail); }
+    }
+
+    // Auto check login session on startup
+    if (token) {
+      switchView("dashboardView");
+    } else {
+      updateNavState(null);
+      switchView("homeView");
+    }
   </script>
 </body>
 </html>
