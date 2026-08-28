@@ -15,7 +15,7 @@ app = FastAPI(title="SEE4USD Premium API Engine")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://see4usd-22k8.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
