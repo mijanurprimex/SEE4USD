@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEE4USD | Premium High-CPM Micro-Task Platform</title>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --accent-color: #10b981;
+      --accent-hover: #059669;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* Navigation Header */
+    header {
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand h1 { font-size: 1.5rem; color: var(--accent-color); font-weight: 800; }
+    .badge-tier1 {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .user-info { display: flex; align-items: center; gap: 20px; }
+    .balance-box {
+      background: var(--card-bg);
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-weight: bold;
+    }
+    .balance-box span { color: var(--accent-color); }
+
+    select {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Layout */
+    container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; width: 100%; flex: 1; }
+    
+    .section-title { margin-bottom: 1rem; font-size: 1.25rem; border-left: 4px solid var(--accent-color); padding-left: 10px; }
+
+    /* Ad Grid */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--glass-shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease;
+    }
+    .card:hover { transform: translateY(-4px); }
+
+    .card-header { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+    .card-title { font-weight: 600; }
+    .payout-tag { color: var(--accent-color); font-weight: 800; font-size: 1.1rem; }
+
+    .card-body { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .btn {
+      background: var(--accent-color);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--accent-hover); }
+
+    /* Modal Overlay */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #1e293b;
+      padding: 2rem;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      border: 1px solid var(--border-color);
+    }
+
+    .timer-display { font-size: 3rem; color: var(--accent-color); font-weight: bold; margin: 1rem 0; }
+    .warning-text { font-size: 0.8rem; color: #ef4444; margin-top: 8px; }
+
+    /* Footer */
+    footer {
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--accent-color); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>SEE4USD</h1>
+      <span class="badge-tier1">Tier-1 Region</span>
+    </div>
+    <div class="user-info">
+      <select id="countrySelect" onchange="fetchData()">
+        <option value="US">🇺🇸 United States</option>
+        <option value="CH">🇨🇭 Switzerland</option>
+        <option value="GB">🇬🇧 United Kingdom</option>
+        <option value="CA">🇨🇦 Canada</option>
+        <option value="AU">🇦🇺 Australia</option>
+        <option value="DE">🇩🇪 Germany</option>
+        <option value="FR">🇫🇷 France</option>
+      </select>
+      <div class="balance-box">Balance: <span id="userBalance">$0.00</span> USD</div>
+    </div>
+  </header>
+
+  <container>
+    <h2 class="section-title">Available High-CPM Advertisements</h2>
+    <div class="grid-container" id="adGrid">
+      </div>
+
+    <h2 class="section-title">Daily Micro-Tasks</h2>
+    <div class="grid-container" id="taskGrid">
+      </div>
+  </container>
+
+  <div class="modal" id="adModal">
+    <div class="modal-content">
+      <h3 id="modalAdTitle">Viewing Advertisement</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 5px;">Do not switch tabs or leave this window.</p>
+      <div class="timer-display" id="timerDisplay">0s</div>
+      <p class="warning-text" id="tabWarning" style="display: none;">⚠️ Paused! Active tab focus required.</p>
+      <button class="btn" id="claimBtn" style="display: none;" onclick="claimReward()">Claim Reward</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 SEE4USD Technologies Inc. All rights reserved.</p>
+    <p style="margin-top: 5px;">GDPR & CCPA Compliant. Users from US, CH, UK, CA, AU, DE, FR receive Tier-1 payouts. <a href="#">Privacy Policy</a></p>
+  </footer>
+
+  <script>
+    const API_BASE = "http://localhost:8000/api/v1";
+    let activeAd = null;
+    let timerVal = 0;
+    let timerInterval = null;
+    let activeToken = "";
+
+    // Rates conversion context for local display calculation
+    const FX_RATES = { US: 1.0, CH: 0.88, GB: 0.79, CA: 1.35, AU: 1.52, DE: 0.92, FR: 0.92 };
+    const CURRENCY_SYMBOLS = { US: "$", CH: "CHF ", GB: "£", CA: "CA$", AU: "A$", DE: "€", FR: "€" };
+
+    async function fetchData() {
+      const country = document.getElementById("countrySelect").value;
+      
+      // Fetch Dashboard stats
+      try {
+        const dashRes = await fetch(`${API_BASE}/user/dashboard?user_id=usr_9982&country=${country}`);
+        const dashData = await dashRes.json();
+        
+        // Update user balance with local currency context calculation
+        const localRate = FX_RATES[country] || 1.0;
+        const symbol = CURRENCY_SYMBOLS[country] || "$";
+        const localEquiv = (dashData.balance_usd * localRate).toFixed(2);
+        
+        document.getElementById("userBalance").innerText = `$${dashData.balance_usd.toFixed(2)} USD (~${symbol}${localEquiv})`;
+
+        // Fetch Ads
+        const adsRes = await fetch(`${API_BASE}/ads?country=${country}`);
+        const ads = await adsRes.json();
+        renderAds(ads);
+      } catch (err) {
+        console.error("API Error: Backend offline or unreachable", err);
+      }
+    }
+
+    function renderAds(ads) {
+      const grid = document.getElementById("adGrid");
+      grid.innerHTML = "";
+      ads.forEach(ad => {
+        grid.innerHTML += `
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">${ad.title}</span>
+              <span class="payout-tag">+$${ad.payout.toFixed(2)}</span>
+            </div>
+            <div class="card-body">
+              Target Region: ${ad.allowed_country}<br>
+              Duration: ${ad.duration} Seconds
+            </div>
+            <button class="btn" onclick="startAd('${ad.id}', '${ad.title}', ${ad.duration})">Watch Ad</button>
+          </div>
+        `;
+      });
+    }
+
+    function startAd(id, title, duration) {
+      activeAd = { id, duration };
+      timerVal = duration;
+      document.getElementById("modalAdTitle").innerText = title;
+      document.getElementById("timerDisplay").innerText = `${timerVal}s`;
+      document.getElementById("claimBtn").style.display = "none";
+      document.getElementById("adModal").style.display = "flex";
+
+      // Mock Token generation for verification handshake
+      activeToken = `tok_${Math.random().toString(36).substring(2, 9)}`;
+
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        if (!document.hidden) {
+          timerVal--;
+          document.getElementById("timerDisplay").innerText = `${timerVal}s`;
+          document.getElementById("tabWarning").style.display = "none";
+
+          if (timerVal <= 0) {
+            clearInterval(timerInterval);
+            document.getElementById("timerDisplay").innerText = "Done!";
+            document.getElementById("claimBtn").style.display = "block";
+          }
+        } else {
+          document.getElementById("tabWarning").style.display = "block";
+        }
+      }, 1000);
+    }
+
+    // Anti-Cheat: Active Window Enforcement
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && timerVal > 0 && activeAd) {
+        document.getElementById("tabWarning").style.display = "block";
+      }
+    });
+
+    async function claimReward() {
+      const country = document.getElementById("countrySelect").value;
+      const res = await fetch(`${API_BASE}/ads/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: "usr_9982",
+          ad_id: activeAd.id,
+          watch_duration: activeAd.duration,
+          token: activeToken,
+          country: country
+        })
+      });
+
+      const data = await res.json();
+      if (data.status === "success") {
+        document.getElementById("adModal").style.display = "none";
+        activeAd = null;
+        fetchData(); // Refresh UI Balance
+      } else {
+        alert("Verification failed: " + data.reason);
+      }
+    }
+
+    // Initialize on page load
+    window.onload = fetchData;
+  </script>
+</body>
+</html>
